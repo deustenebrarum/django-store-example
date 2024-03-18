@@ -20,6 +20,12 @@ class Product(models.Model):
     )
     count = models.IntegerField(default=0, verbose_name='Количество')
     is_active = models.BooleanField(default=True, verbose_name='Активен?')
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата создания'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name='Дата обновления'
+    )
 
     class Meta:
         verbose_name = 'Товар'
