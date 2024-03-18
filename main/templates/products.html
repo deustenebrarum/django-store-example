@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Товары</title>
+<link rel="stylesheet" href="{% static 'styles/products.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<ul class="product-list">
+    <!-- li*5>div.product-card>h2.product-card__title+p.product-card__text
+     -->
+    {% for product in products %}
+    <li>
+        <div class="product-card">
+            <h2 class="product-card__title">{{ product.title }}</h2>
+            <p class="product-card__text">{{ product.description }}</p>
+            <a href="/product/1" class="product-card__link">Подробнее</a>
+        </div>
+    </li>
+    {% endfor %}
+
+</ul>
+
+{% endblock %}

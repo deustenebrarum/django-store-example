@@ -1,0 +1,22 @@
+.product-list {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.product-card {
+    padding: 1em;
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.product-card__link {
+    display: block;
+    background-color: rgb(227, 227, 227);
+    padding: 0.5em;
+    width: fit-content;
+    border-radius: 5px;
+    margin: 0 auto;
+}

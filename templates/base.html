@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <header class="header">
+        <span class="logo">ПеКа</span>
+        <div class="menu">
+            <nav class="nav-menu">
+                <ul class="nav-menu__list">
+                    <li><a href="#">Товары</a></li>
+                    <li><a href="#">Корзина</a></li>
+                    <li><a href="#">Профиль</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p><small>© 2024, Все права защищены</small></p>
+    </footer>
+</body>
+</html>
