@@ -28,3 +28,10 @@
 .product-card_disabled {
     opacity: 0.5;
 }
+
+.product-card__image {
+    display: block;
+    object-fit: contain;
+    width: 140px;
+    height: 140px;
+}
