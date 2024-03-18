@@ -5,7 +5,7 @@ from .models import Product
 
 
 def index_view(request: HttpRequest):
-    products = Product.objects.all()
+    products = Product.objects.filter(is_active=True)
 
     return HttpResponse(render(request, 'products.html', {
         'products': products

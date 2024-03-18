@@ -15,9 +15,21 @@
      -->
     {% for product in products %}
     <li>
-        <div class="product-card">
+        <div 
+            class="
+                product-card 
+                {% if product.count < 1 %}product-card_disabled{% endif %}
+            "
+        >
             <h2 class="product-card__title">{{ product.title }}</h2>
             <p class="product-card__text">{{ product.description }}</p>
+            <div class="product-card__prices-container">
+            {% if product.original_price is not None %}
+            <p class="product-card__original-price">{{ product.original_price }}</p>
+            {% endif %}
+            <p class="product-card__price">{{ product.price }}</p>
+            </div>
+            
             <a href="/product/1" class="product-card__link">Подробнее</a>
         </div>
     </li>
