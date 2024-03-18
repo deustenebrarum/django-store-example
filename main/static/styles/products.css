@@ -35,3 +35,7 @@
     width: 140px;
     height: 140px;
 }
+
+.product-card__original-price {
+    text-decoration: line-through;
+}
