@@ -17,10 +17,11 @@
     <li>
         <div 
             class="
-                product-card 
+                product-card
                 {% if product.count < 1 %}product-card_disabled{% endif %}
             "
         >
+            <img class="product-card__image" src="{{ product.image.url }}" alt="{{ product.title }}">
             <h2 class="product-card__title">{{ product.title }}</h2>
             <p class="product-card__text">{{ product.description }}</p>
             <div class="product-card__prices-container">
