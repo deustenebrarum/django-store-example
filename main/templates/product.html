@@ -21,8 +21,12 @@
             {% endif %}
             <p class="product__field"><span class="product__price">{{ product.price }}</span></p>
         </div>
-        <form action="" class="product__add-to-basket-form">
-            <button type="submit" class="product__add-to-basket-button">
+        <form action="{% url 'add_to_basket' product.id %}" class="product__add-to-basket-form">
+            <button 
+                type="submit"
+                class="product__add-to-basket-button"
+                {% if product.count < 1 %}disabled{% endif %}
+            >
                 В корзину
             </button>
         </form>
