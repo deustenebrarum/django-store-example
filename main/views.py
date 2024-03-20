@@ -22,3 +22,7 @@ def product_view(request: HttpRequest, id: int):
     return HttpResponse(render(request, 'product.html', {
         'product': product
     }))
+
+
+def add_to_basket_view(request: HttpRequest, id: int):
+    pass
