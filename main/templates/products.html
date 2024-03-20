@@ -36,7 +36,7 @@
             <p class="product-card__price">{{ product.price }}</p>
             </div>
             
-            <a href="/product/1" class="product-card__link">Подробнее</a>
+            <a href="{% url 'product' product.id %}" class="product-card__link">Подробнее</a>
         </div>
     </li>
     {% endfor %}

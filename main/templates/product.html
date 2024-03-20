@@ -3,11 +3,17 @@
 
 {% block head %}
 
-<title>Товары</title>
+<title>{{ product.title }}</title>
 <link rel="stylesheet" href="{% static 'styles/product.css' %}">
 
 {% endblock %}
 
 {% block content %}
+
+<img src="{% if product.image.url is not None %}{{ product.image.url }}{% endif %}" alt="">
+<h1>{{ product.title }}</h1>
+<p>{{ product.original_price }}</p>
+<p>{{ product.price }}</p>
+<p>{{ product.description }}</p>
 
 {% endblock %}
