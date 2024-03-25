@@ -34,10 +34,26 @@ body {
     background-color: #ccc;
 }
 
+.nav-menu__profile a {
+    padding: 0.25em 0.25em;
+}
+
+.nav-menu__profile-icon {
+    display: block;
+    height: 1.5em;
+    width: auto;
+}
+
 .main-content {
     padding: 3em;
 }
 
 button {
     cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .main-content {
+        padding: 3em 1em;
+    }
 }
