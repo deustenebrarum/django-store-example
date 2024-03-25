@@ -1,8 +1,10 @@
 .product-list {
+    margin: 0 auto;
     list-style: none;
-    display: flex;
-    flex-direction: row;
-    gap: 2em;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 2em;
+    flex-wrap: wrap;
 }
 
 .product-card {
@@ -25,6 +27,7 @@
 }
 
 .product-card__image {
+    margin: 0 auto;
     display: block;
     object-fit: contain;
     width: 140px;

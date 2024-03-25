@@ -4,6 +4,11 @@
     justify-content: space-around;
 }
 
+.product__image {
+    width: 500px;
+    height: auto;
+}
+
 .product__info {
     display: flex;
     flex-direction: column;

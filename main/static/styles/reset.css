@@ -45,6 +45,7 @@ table {
 }
 
 button {
+	font: inherit;
 	outline: none;
 	border:none;
 	background-image:none;
@@ -56,6 +57,7 @@ button {
 }
 
 input {
+	font: inherit;
 	outline: none;
 	border:none;
 	background-image:none;
