@@ -36,6 +36,7 @@
         <div>
             <div class="basket-total__price">Итого: {{ total_price }}</div>
             <a href="{% url 'products' %}" class="basket-total__buy-button">Оформить заказ</a>
+            <a href="{% url 'basket_clear' %}" class="basket-total__clear-button">Очистить корзину</a>
         </div>
     </div>
 </div>

@@ -44,7 +44,7 @@ def add_to_basket_view(request: HttpRequest, id: int):
         }
     ]
 
-    return redirect('products')
+    return redirect('basket')
 
 
 def basket_view(request: HttpRequest):
@@ -56,3 +56,9 @@ def basket_view(request: HttpRequest):
     return HttpResponse(render(request, 'basket.html', {
         'items': items
     }))
+
+
+def basket_clear_view(request: HttpRequest):
+    request.session.update({'basket': []})
+
+    return redirect('basket')
