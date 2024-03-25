@@ -18,7 +18,11 @@
                 <ul class="nav-menu__list">
                     <li><a href="{% url 'products' %}">Товары</a></li>
                     <li><a href="{% url 'basket' %}">Корзина</a></li>
-                    <li class="nav-menu__profile"><a href="#"><img class="nav-menu__profile-icon" src="{% static 'icons/profile.png' %}" alt="profile"></a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-menu__profile"><a href="{% url 'profile' %}"><img class="nav-menu__profile-icon" src="{% static 'icons/profile.png' %}" alt="profile"></a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Войти</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
