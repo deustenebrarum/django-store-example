@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+
+<title>Корзина</title>
+<link rel="stylesheet" href="{% static 'styles/basket.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="basket-container">
+    <ul class="basket-item-list">
+        {% for item in items %}
+        <li class="basket-item-container">
+            <div class="basket-item">
+                <a href="{% url 'product' item.product.id %}" >
+                    <img
+                        class="basket-item__image"
+                        src="{% if item.product.image.url is not None %}{{ item.product.image.url }}{% endif %}"
+                        alt="{{ item.product.title }}"
+                    />
+                </a>
+                <div class="basket-item__quantity">
+                    {{ item.quantity }}
+                </div>
+                <div class="basket-item__title">{{ item.product.title }}</div>
+                <div class="basket-item__price">{{ item.product.price }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <div class="basket-total">
+        <div>
+            <div class="basket-total__price">Итого: {{ total_price }}</div>
+            <a href="{% url 'products' %}" class="basket-total__buy-button">Оформить заказ</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
