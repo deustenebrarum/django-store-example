@@ -38,12 +38,8 @@
 }
 
 .product__add-to-basket-button {
-    display: block;
     margin: 0 auto;
     width: 100%;
-    padding: 0.3em;
-    outline: 1px solid black;
-    border-radius: 0.3em;
 }
 
 .product__add-to-basket-button:hover {

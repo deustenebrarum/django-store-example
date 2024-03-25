@@ -24,7 +24,7 @@
         <form action="{% url 'add_to_basket' product.id %}" class="product__add-to-basket-form">
             <button 
                 type="submit"
-                class="product__add-to-basket-button"
+                class="button product__add-to-basket-button"
                 {% if product.count < 1 %}disabled{% endif %}
             >
                 В корзину

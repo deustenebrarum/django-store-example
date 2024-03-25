@@ -37,21 +37,11 @@
 }
 
 .basket-total__buy-button {
-    border-radius: 0.3em;
-    display: block;
-    padding: 0.3em;
-    border: 1px solid black;
     margin-bottom: 0.5em;
-    text-align: center;
 }
 
 .basket-total__clear-button {
-    border-radius: 0.3em;
-    display: block;
-    padding: 0.3em;
-    border: 1px solid black;
     color: #e10000;
-    text-align: center;
 }
 
 @media (max-width: 600px) {
