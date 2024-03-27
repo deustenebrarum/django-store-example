@@ -35,7 +35,7 @@
     <div class="basket-total">
         <div>
             <div class="basket-total__price"><span>Итого:</span><span class="basket-total__price-value">{{ total_price }}</span></div>
-            <a href="{% url 'products' %}" class="button basket-total__buy-button">Оформить заказ</a>
+            <a href="{% url 'order' %}" class="button basket-total__buy-button">Оформить заказ</a>
             <a href="{% url 'basket_clear' %}" class="button basket-total__clear-button">Очистить корзину</a>
         </div>
     </div>

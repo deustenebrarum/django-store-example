@@ -10,7 +10,7 @@
 
 {% block content %}
 
-<form action="{% url 'logout' %}" method="post">
+<form action="/auth/logout/?next=/auth/login/" method="post">
     {% csrf_token %}
     <button type="submit">Выйти</button>
 </form>

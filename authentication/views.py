@@ -1,5 +1,6 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.contrib.auth import authenticate, login
 
 from .forms import RegisterForm
 
@@ -16,6 +17,11 @@ def sign_up(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1']
+            )
+            login(request, user)
             return HttpResponse(render(request, 'profile.html', {}))
         else:
             return HttpResponse(render(

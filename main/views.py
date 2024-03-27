@@ -76,3 +76,30 @@ def basket_clear_view(request: HttpRequest):
     request.session.update({'basket': []})
 
     return redirect('basket')
+
+
+def order_view(request: HttpRequest):
+    if request.method == 'GET':
+        if not request.user.is_authenticated:
+            login_page = redirect('login')
+            login_page['Location'] += '?next=/order'
+            return login_page
+
+        basket_items = request.session.get('basket', [])
+
+        if len(basket_items) < 1:
+            return redirect('basket')
+
+        basket_products_ids = [item['product_id'] for item in basket_items]
+        basket_products = Product.objects.filter(id__in=basket_products_ids)
+
+        for item in basket_items:
+            item['product'] = basket_products.get(id=item['product_id'])
+
+        basket_sum = sum(item['product'].price * item['quantity']
+                         for item in basket_items)
+
+        return HttpResponse(render(request, 'order.html', {
+            'order_sum': basket_sum,
+            'products': basket_items,
+        }))
