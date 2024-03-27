@@ -1,0 +1,24 @@
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-errors {
+    text-align: center;
+    margin-bottom: 0.5em;
+    color: #e10000;
+}
+
+.input-group {
+    margin-bottom: 1em;
+}

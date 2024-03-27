@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Регистрация</title>
+<link rel="stylesheet" href="{% static 'styles/register.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="register-errors">
+    {% if form.errors %}
+    <p>Произошла ошибка при входе.</p>
+    {% endif %} 
+    {% if user.is_authenticated %}
+    <p>
+      Вы уже авторизованы.
+    </p>
+    {% endif %}
+  </div>
+
+<form class="register-form" method="POST" action="{% url 'register' %}">
+	{% csrf_token %}
+    <div class="input-group">
+        {{ form.username.label_tag }} {{ form.username }}
+    </div>
+    <div class="input-group">
+        {{ form.email.label_tag }} {{ form.email }}
+    </div>
+    <div class="input-group">
+        {{ form.password1.label_tag }} {{ form.password1 }}
+    </div>
+    <div class="input-group">
+        {{ form.password2.label_tag }} {{ form.password2 }}
+    </div>
+    <input class="button" type="submit" value="Зарегистрироваться" />
+</form>
+
+<p>
+    <a class="link" href="{% url 'login' %}">Уже есть аккаунт?</a>
+</p>
+  
+
+{% endblock content%}

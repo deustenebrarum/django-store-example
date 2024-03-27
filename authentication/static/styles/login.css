@@ -3,7 +3,11 @@
 }
 
 .main-content {
-    padding: 2em 3em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .login-errors {

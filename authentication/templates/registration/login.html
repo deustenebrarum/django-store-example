@@ -1,44 +1,41 @@
-{% extends "base.html" %}
-
-{% load static %}
-
-{% block head %}
+{% extends "base.html" %} {% load static %} {% block head %}
 
 <title>Войти</title>
-<link rel="stylesheet" href="{% static 'styles/login.css' %}">
+<link rel="stylesheet" href="{% static 'styles/login.css' %}" />
 
-{% endblock %}
+{% endblock %} {% block content %}
 
-{% block content %}
+<div class="login-errors">
+  {% if form.errors %}
+  <p>Произошла ошибка при входе.</p>
+  {% endif %} {% if next %} {% if user.is_authenticated %}
+  <p>
+    Ваша учётная запись не имеет доступа на эту страницу. Чтобы продолжить,
+    войдите с помощью учётной записи, которая имеет доступ.
+  </p>
+  {% else %}
+  <p>Пожалуйста, войдите, чтобы увидеть эту страницу.</p>
+  {% endif %} {% endif %}
+</div>
 
-  <div class="login-errors">
-    {% if form.errors %}
-      <p>Произошла ошибка при входе.</p>
-    {% endif %}
-    {% if next %}
-      {% if user.is_authenticated %}
-        <p>Ваша учётная запись не имеет доступа на эту страницу. Чтобы продолжить,
-        войдите с помощью учётной записи, которая имеет доступ.</p>
-      {% else %}
-        <p>Пожалуйста, войдите, чтобы увидеть эту страницу.</p>
-      {% endif %}
-    {% endif %}
+<form class="login-form" method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <div class="input-group">
+    {{ form.username.label_tag }} {{ form.username }}
   </div>
+  <div class="input-group input-group-password">
+    {{ form.password.label_tag }} {{ form.password }}
+  </div>
+  <input class="button" type="submit" value="Войти" />
+  <input type="hidden" name="next" value="{{ next }}" />
+</form>
 
-  <form class="login-form" method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <div class="input-group">
-      {{ form.username.label_tag }}
-      {{ form.username }}
-    </div>
-    <div class="input-group input-group-password">
-      {{ form.password.label_tag }}
-      {{ form.password }}
-    </div>
-    <input class="button" type="submit" value="Войти">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
+<p class="forgot-password-link-container">
+  <a class="link" href="{% url 'register' %}">Регистрация</a>
+</p>
 
-  <p class="forgot-password-link-container"><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+<p class="forgot-password-link-container">
+  <a class="link" href="{% url 'password_reset' %}">Забыли пароль?</a>
+</p>
 
 {% endblock %}

@@ -8,10 +8,11 @@
 
 {% endblock %}
 
-
 {% block content %}
 
-<h1>Профиль</h1>
-<p>Здесь будет информация о профиле</p>
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Выйти</button>
+</form>
 
 {% endblock %}
