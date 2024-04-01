@@ -21,6 +21,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 11em;
 }
 
 .forgot-password-link-container {

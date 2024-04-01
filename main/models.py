@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -33,3 +34,63 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class OrderProduct(models.Model):
+    order = models.ForeignKey(
+        'Order', on_delete=models.CASCADE, verbose_name='Заказ'
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, verbose_name='Товар'
+    )
+    quantity = models.IntegerField(verbose_name='Количество')
+    price = models.DecimalField(
+        max_digits=12, decimal_places=2, verbose_name='Цена'
+    )
+
+    def __str__(self):
+        return f'{self.quantity} of {self.product.title}'
+
+
+class Order(models.Model):
+    class Status(models.TextChoices):
+        CREATED = 'CREATED', 'Создан'
+        PAYED = 'PAYED', 'Оплачен'
+        IN_PROGRESS = 'IN_PROGRESS', 'В обработке'
+        DELIVERING = 'DELIVERING', 'Доставляется'
+        DELIVERED = 'DELIVERED', 'Доставлен'
+        CANCELED = 'CANCELED', 'Отменен'
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Пользователь'
+    )
+    products = models.ManyToManyField(
+        Product, verbose_name='Товары',
+        through=OrderProduct,
+        through_fields=('order', 'product')
+    )
+    status = models.CharField(
+        verbose_name='Статус',
+        max_length=15, choices=Status.choices, default=Status.CREATED
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name='Дата создания'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True, verbose_name='Дата обновления'
+    )
+
+    @property
+    def total_price(self):
+        return sum([
+            order_product.price * order_product.quantity
+            for order_product in OrderProduct.objects.filter(order=self)
+        ])
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f'Order on {str(self.product)}'

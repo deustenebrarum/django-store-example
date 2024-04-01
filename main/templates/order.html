@@ -11,12 +11,10 @@
 <h2>Ваш заказ:</h2>
 
 {% for item in products %}
-<p>{{ item.product.title }} ({{ item.product.price }} руб) - {{ item.quantity }} шт.</p>
+<p>{{ item.product.title }} ({{ item.price }} руб) - {{ item.quantity }} шт.</p>
 {% endfor %}
 
-<p>Итого: {{ order_sum }} руб</p>
-
-<p>Спасибо, что покупаете у нас!</p>
+<p>Итого: {{ order.total_price }} руб</p>
 
 {% endblock %}
 
