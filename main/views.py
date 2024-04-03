@@ -4,14 +4,22 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from .models import Order, OrderProduct, Product
+from .forms import SearchForm
 
 
 def products_view(request: HttpRequest):
     products = Product.objects.filter(is_active=True)
     products = products.order_by('-count')
 
+    search_form = SearchForm(request.GET)
+    if search_form.is_valid():
+        products = products.filter(
+            title__icontains=search_form.cleaned_data['query']
+        )
+
     return HttpResponse(render(request, 'products.html', {
-        'products': products
+        'products': products,
+        'search_form': search_form
     }))
 
 

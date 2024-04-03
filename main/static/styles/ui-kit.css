@@ -20,6 +20,23 @@
     padding: 0.2em 0.3em;
 }
 
+.complex-input {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 0.3em;
+    border: 1px solid black;
+}
+
+.complex-input input {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    display: block;
+    border-radius: 0;
+    padding: 0.2em 0.3em;
+}
+
 .label + .input, .input-group label + input {
     margin-top: 0.2em;
 }

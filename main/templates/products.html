@@ -10,6 +10,18 @@
 
 {% block content %}
 
+<div class="search-container">
+    <form class="search-form" method="GET" action="{% url 'products' %}">
+        <div class="complex-input">
+            <div class="search-form__input_container">{{ search_form.query }}</div>
+            <button class="search-form__button" type="submit">
+                <img class="search-icon" src="{% static 'icons/search.png' %}" alt="find">
+            </button>
+        </div>
+    </form>
+</div>
+
+
 <ul class="product-list">
     <!-- li*5>div.product-card>h2.product-card__title+p.product-card__text
      -->
