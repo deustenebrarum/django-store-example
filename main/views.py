@@ -41,7 +41,7 @@ def product_view(request: HttpRequest, id: int):
     }))
 
 
-def add_to_basket_view(request: HttpRequest, id: int):
+def basket_add_view(request: HttpRequest, id: int):
     product = get_product_for_view(id=id)
 
     if product.count < 1:
@@ -67,6 +67,24 @@ def add_to_basket_view(request: HttpRequest, id: int):
     return redirect('basket')
 
 
+def basket_increase_view(request: HttpRequest, id: int):
+    items = request.session.get('basket', [])
+
+    found_item = next(
+        (item for item in items if item['product_id'] == id),
+        None,
+    )
+
+    if found_item is None:
+        raise Http404('Товар не найден')
+
+    found_item['quantity'] = found_item['quantity'] + 1
+
+    request.session['basket'] = items
+
+    return HttpResponse(status=200)
+
+
 def basket_view(request: HttpRequest):
     items = request.session.get('basket', [])
 
@@ -88,6 +106,27 @@ def basket_clear_view(request: HttpRequest):
     return redirect('basket')
 
 
+def basket_decrease_view(request: HttpRequest, id: int):
+    items = request.session.get('basket', [])
+
+    found_item = next(
+        (item for item in items if item['product_id'] == id),
+        None,
+    )
+
+    if found_item is None:
+        raise Http404('Товар не найден')
+
+    if found_item['quantity'] > 1:
+        found_item['quantity'] = found_item['quantity'] - 1
+    else:
+        items.remove(found_item)
+
+    request.session['basket'] = items
+
+    return HttpResponse(status=200)
+
+
 @require_http_methods(["POST"])
 def order_view(request: HttpRequest):
     if not request.user.is_authenticated:
@@ -102,6 +141,10 @@ def order_view(request: HttpRequest):
         order.save()
 
         basket = request.session.get('basket', [])
+
+        if len(basket) == 0:
+            return redirect('basket')
+
         for item in basket:
             order_product = OrderProduct(order=order)
             order_product.product = Product.objects.get(id=item['product_id'])

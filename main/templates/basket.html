@@ -1,49 +1,144 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block head %}
+{% extends 'base.html' %} {% load static %} {% load l10n %} {% block head %}
 
 <title>Корзина</title>
-<link rel="stylesheet" href="{% static 'styles/basket.css' %}">
+<link rel="stylesheet" href="{% static 'styles/basket.css' %}" />
 
-{% endblock %}
+<script>
+  function updateQuantity(csrfToken, productId, quantityElement) {
+    const url = `/product/${productId}/increase/`;
 
-{% block content %}
+    const data = new FormData();
+    data.append("csrfmiddlewaretoken", csrfToken);
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: new URLSearchParams(data),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Can't update");
+      }
+      
+      quantityElement.textContent = +quantityElement.textContent + 1;
+    });
+  }
+
+  function decreaseQuantity(csrfToken, productId, quantityElement, basketItemElement) {
+    const url = `/product/${productId}/decrease/`;
+
+    const data = new FormData();
+    data.append("csrfmiddlewaretoken", csrfToken);
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: new URLSearchParams(data),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Can't update");
+      }
+
+      if (+quantityElement.textContent <= 1) {
+        basketItemElement.remove();
+        return;
+      }
+      
+      quantityElement.textContent = +quantityElement.textContent - 1;
+    });
+  }
+
+  function updatePrice(priceElement, priceChange) {
+    console.log(priceElement.textContent);
+    
+    const newPrice = +priceElement.textContent + priceChange;
+    const newPriceText = newPrice.toFixed(2);
+
+    priceElement.textContent = newPriceText;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const totalPriceElement = document.querySelector(".basket-total__price-value");
+    const basketItems = document.querySelectorAll(".basket-item");
+    const csrfToken = document.querySelector("input[name='csrfmiddlewaretoken']").value;
+
+    for (const basketItem of basketItems) {
+      const decreaseButton = basketItem.querySelector(".basket-item__quantity-decrease");
+      const increaseButton = basketItem.querySelector(".basket-item__quantity-increase");
+      const quantityElement = basketItem.querySelector(".basket-item__quantity");
+      const productId = basketItem.dataset.id;
+
+      decreaseButton.addEventListener("click", () => {
+        decreaseQuantity(
+          csrfToken, productId, 
+          quantityElement, basketItem.closest(".basket-item-container")
+        );
+        
+        updatePrice(totalPriceElement, -+basketItem.dataset.price);
+      });
+      increaseButton.addEventListener("click", () => {
+        updateQuantity(csrfToken, productId, quantityElement);
+        updatePrice(totalPriceElement, +basketItem.dataset.price);
+      });
+    }
+  });
+
+
+</script>
+
+{% endblock %} {% block content %}
 
 <div class="basket-container">
-    <ul class="basket-item-list">
-        {% for item in items %}
-        <li class="basket-item-container">
-            <div class="basket-item">
-                <a href="{% url 'product' item.product.id %}" >
-                    <img
-                        class="basket-item__image"
-                        src="{% if item.product.image.url is not None %}{{ item.product.image.url }}{% endif %}"
-                        alt="{{ item.product.title }}"
-                    />
-                </a>
-                <div class="basket-item__quantity">
-                    {{ item.quantity }}
-                </div>
-                <div class="basket-item__title">{{ item.product.title }}</div>
-                <div class="basket-item__price">{{ item.product.price }}</div>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-    
-    <div class="basket-total">
-        <div>
-            <div class="basket-total__price"><span>Итого:</span><span class="basket-total__price-value">{{ total_price }}</span></div>
-            <form action="{% url 'make_order' %}" method="POST">
-                <button type="submit" class="button basket-total__buy-button">
-                    {% csrf_token %}
-                    Оформить заказ
-                </button>
-            </form>
-            <a href="{% url 'basket_clear' %}" class="button basket-total__clear-button">Очистить корзину</a>
+  {% csrf_token %}
+  <ul class="basket-item-list">
+    {% for item in items %}
+    <li class="basket-item-container">
+      <div class="basket-item" data-price="{{ item.product.price|unlocalize }}" data-id="{{ item.product.id }}">
+        <a href="{% url 'product' item.product.id %}">
+          <img
+            class="basket-item__image"
+            src="{% if item.product.image.url is not None %}{{ item.product.image.url }}{% endif %}"
+            alt="{{ item.product.title }}"
+          />
+        </a>
+        <div class="basket-item__quantity-container">
+          <button class="button basket-item__quantity-change basket-item__quantity-decrease">-</button>
+          <div class="basket-item__quantity">{{ item.quantity }}</div>
+          <button class="button basket-item__quantity-change basket-item__quantity-increase">+</button>
         </div>
+        <div class="basket-item__title">{{ item.product.title }}</div>
+        <div class="basket-item__price">{{ item.product.price|unlocalize }}</div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <div class="basket-total">
+    <div>
+      <div class="basket-total__price">
+        <span>Итого:</span
+        ><span class="basket-total__price-value">{{ total_price|unlocalize }}</span>
+      </div>
+      <form action="{% url 'make_order' %}" method="POST">
+        {% csrf_token %}
+        <button 
+          type="submit" class="button basket-total__buy-button"
+          {% if items|length == 0 %} disabled {% endif %}
+        >
+          Оформить заказ
+        </button>
+      </form>
+      <a
+        href="{% url 'basket_clear' %}"
+        class="button basket-total__clear-button"
+      >
+        Очистить корзину
+      </a>
     </div>
+  </div>
 </div>
 
 {% endblock %}

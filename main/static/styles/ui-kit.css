@@ -7,6 +7,11 @@
     text-align: center;
 }
 
+.button:disabled {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
 .input-group {
     display: block;
     width: 100%;

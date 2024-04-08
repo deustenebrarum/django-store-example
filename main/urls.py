@@ -7,8 +7,18 @@ urlpatterns = [
     path('product/<int:id>/', views.product_view, name='product'),
     path(
         'product/<int:id>/add/',
-        views.add_to_basket_view,
+        views.basket_add_view,
         name='add_to_basket'
+    ),
+    path(
+        'product/<int:id>/increase/',
+        views.basket_increase_view,
+        name='basket_increase'
+    ),
+    path(
+        'product/<int:id>/decrease/',
+        views.basket_decrease_view,
+        name='basket_decrease'
     ),
     path('basket/', views.basket_view, name='basket'),
     path('basket/clear/', views.basket_clear_view, name='basket_clear'),
