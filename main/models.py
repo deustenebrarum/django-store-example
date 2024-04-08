@@ -74,6 +74,10 @@ class Order(models.Model):
         max_length=15, choices=Status.choices, default=Status.CREATED
     )
 
+    @property
+    def status_label(self):
+        return dict(Order.Status.choices)[self.status]
+
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name='Дата создания'
     )

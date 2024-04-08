@@ -1,0 +1,17 @@
+.logout-form {
+    margin-bottom: 2em;
+}
+
+.order-card {
+    margin-bottom: 1em;
+}
+
+.order-card_link-cancel {
+    margin-left: 0.5em;
+}
+
+.order-card__buttons {
+    display: flex;
+    flex-direction: row;
+    padding-top: 0.5em;
+}

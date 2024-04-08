@@ -5,11 +5,17 @@
     padding: 0.3em;
     border: 1px solid black;
     text-align: center;
+    color: black;
 }
 
 .button:disabled {
     border: 1px solid rgba(0, 0, 0, 0.5);
     cursor: default;
+}
+
+.button_error {
+    border: 1px solid rgb(231, 14, 14);
+    color: rgb(231, 14, 14);
 }
 
 .input-group {

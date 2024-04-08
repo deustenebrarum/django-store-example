@@ -1,4 +1,6 @@
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import (
+    Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -179,3 +181,32 @@ def get_order_view(request: HttpRequest, id: int):
         'order': order,
         'products': OrderProduct.objects.filter(order=order),
     }))
+
+
+@require_http_methods(["GET"])
+def cancel_order_view(request: HttpRequest, id: int):
+    try:
+        order = Order.objects.get(id=id)
+    except Order.DoesNotExist:
+        raise Http404('Заказ не найден')
+
+    if order.user != request.user:
+        return HttpResponseBadRequest(
+            'Вы не можете отменить этот заказ',
+            status='403'
+        )
+
+    if not order.is_cancelable:
+        return HttpResponseBadRequest(
+            'Этот заказ уже нельзя отменить. Обратитесь к администратору.',
+            status='400'
+        )
+
+    for order_product in OrderProduct.objects.filter(order=order):
+        order_product.product.count += order_product.quantity
+        order_product.product.save()
+
+    order.status = Order.Status.CANCELED
+    order.save()
+
+    return redirect('profile')

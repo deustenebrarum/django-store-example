@@ -1,18 +1,43 @@
-{% extends 'base.html' %}
-
-
-{% block head %}
+{% extends 'base.html' %} {% load static %} {% block head %}
 
 <title>Профиль</title>
-<link rel="stylesheet" href="styles/profile.css">
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}" />
 
-{% endblock %}
+{% endblock %} {% block content %}
 
-{% block content %}
-
-<form action="/auth/logout/?next=/auth/login/" method="post">
-    {% csrf_token %}
-    <button type="submit">Выйти</button>
+<form
+  class="logout-form"
+  action="/auth/logout/?next=/auth/login/"
+  method="post"
+>
+  {% csrf_token %}
+  <button type="submit" class="button">Выйти из аккаунта</button>
 </form>
+
+<div class="orders-container">
+  <p>Ваши заказы:</p>
+  <ol class="order-list">
+    {% for order in orders %}
+    <li class="order-card">
+      <p class="order-card__id">Номер: {{ order.id }}</p>
+      <p class="order-card__date">Дата: {{ order.created_at }}</p>
+      <p class="order-card__total-price">Итого: {{ order.total_price }} руб</p>
+      <div class="order-card__status">Статус: {{ order.status_label }}</div>
+      <div class="order-card__buttons">
+        <a href="{% url 'get_order' order.id %}" class="button order-card__link"
+          >Посмотреть</a
+        >
+        {% if order.is_cancelable %}
+        <a
+          href="{% url 'cancel_order' order.id %}"
+          class="button button_error order-card__link order-card_link-cancel"
+          >Отменить</a
+        >
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</div>
 
 {% endblock %}

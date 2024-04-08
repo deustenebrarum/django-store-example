@@ -2,11 +2,15 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 
+from main.models import Order
+
 from .forms import RegisterForm
 
 
 def profile_view(request: HttpRequest):
-    return HttpResponse(render(request, 'profile.html', {}))
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+
+    return HttpResponse(render(request, 'profile.html', {'orders': orders}))
 
 
 def sign_up(request):
