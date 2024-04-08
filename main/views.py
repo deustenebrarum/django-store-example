@@ -1,4 +1,4 @@
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -69,6 +69,7 @@ def basket_add_view(request: HttpRequest, id: int):
 
 def basket_increase_view(request: HttpRequest, id: int):
     items = request.session.get('basket', [])
+    product = get_product_for_view(id=id)
 
     found_item = next(
         (item for item in items if item['product_id'] == id),
@@ -77,6 +78,9 @@ def basket_increase_view(request: HttpRequest, id: int):
 
     if found_item is None:
         raise Http404('Товар не найден')
+
+    if product.count < found_item['quantity'] + 1:
+        raise HttpRequest('Товар закончился', status=400)
 
     found_item['quantity'] = found_item['quantity'] + 1
 
@@ -146,9 +150,15 @@ def order_view(request: HttpRequest):
             return redirect('basket')
 
         for item in basket:
+            product = Product.objects.get(id=item['product_id'])
+            if item['quantity'] > product.count:
+                return HttpResponseBadRequest('Товара не хватает')
+
+        for item in basket:
             order_product = OrderProduct(order=order)
             order_product.product = Product.objects.get(id=item['product_id'])
             order_product.quantity = item['quantity']
+            order_product.product.count -= order_product.quantity
             order_product.price = order_product.product.price
             order_product.save()
 

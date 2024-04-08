@@ -4,13 +4,13 @@
 <link rel="stylesheet" href="{% static 'styles/basket.css' %}" />
 
 <script>
-  function updateQuantity(csrfToken, productId, quantityElement) {
+  async function updateQuantity(csrfToken, productId, quantityElement) {
     const url = `/product/${productId}/increase/`;
 
     const data = new FormData();
     data.append("csrfmiddlewaretoken", csrfToken);
 
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -25,13 +25,13 @@
     });
   }
 
-  function decreaseQuantity(csrfToken, productId, quantityElement, basketItemElement) {
+  async function decreaseQuantity(csrfToken, productId, quantityElement, basketItemElement) {
     const url = `/product/${productId}/decrease/`;
 
     const data = new FormData();
     data.append("csrfmiddlewaretoken", csrfToken);
 
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
@@ -71,16 +71,16 @@
       const quantityElement = basketItem.querySelector(".basket-item__quantity");
       const productId = basketItem.dataset.id;
 
-      decreaseButton.addEventListener("click", () => {
-        decreaseQuantity(
+      decreaseButton.addEventListener("click", async () => {
+        await decreaseQuantity(
           csrfToken, productId, 
           quantityElement, basketItem.closest(".basket-item-container")
-        );
+        )
         
         updatePrice(totalPriceElement, -+basketItem.dataset.price);
       });
-      increaseButton.addEventListener("click", () => {
-        updateQuantity(csrfToken, productId, quantityElement);
+      increaseButton.addEventListener("click", async () => {
+        await updateQuantity(csrfToken, productId, quantityElement);
         updatePrice(totalPriceElement, +basketItem.dataset.price);
       });
     }
