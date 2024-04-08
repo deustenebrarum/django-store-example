@@ -4,6 +4,7 @@ from django.http import (
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
 
 from .models import Order, OrderProduct, Product
 from .forms import SearchForm
@@ -13,6 +14,11 @@ def products_view(request: HttpRequest):
     products = Product.objects.filter(is_active=True)
     products = products.order_by('-count')
 
+    paginator = Paginator(products, 1)
+
+    page_number = request.GET.get("page", 1)
+    paged_products = paginator.get_page(page_number)
+
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
         products = products.filter(
@@ -20,7 +26,7 @@ def products_view(request: HttpRequest):
         )
 
     return HttpResponse(render(request, 'products.html', {
-        'products': products,
+        'products_page': paged_products,
         'search_form': search_form
     }))
 
