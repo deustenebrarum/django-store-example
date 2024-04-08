@@ -160,6 +160,7 @@ def order_view(request: HttpRequest):
             order_product.quantity = item['quantity']
             order_product.product.count -= order_product.quantity
             order_product.price = order_product.product.price
+            order_product.product.save()
             order_product.save()
 
         request.session.update({'basket': []})
