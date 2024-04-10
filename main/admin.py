@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html_join
+from django.urls import reverse
 
 from .models import Order, Product
 
@@ -16,11 +18,21 @@ class OrderAdmin(admin.ModelAdmin):
         'user__last_name'
     )
 
-    fields = ('user', 'status')
+    fields = ('user', 'status', 'display_order_products')
+    
+    readonly_fields = ('display_order_products', '_id', 'total_price')
 
     list_filter = ('status', 'created_at', 'updated_at')
 
     actions = ['cancel_order', 'set_payed', 'set_in_progress']
+    
+    @admin.display(description='Товары в заказе:')
+    def display_order_products(self, obj):
+        return format_html_join(
+            '<br>', 
+            '<li><a href="{}">{}</a></li>', 
+            [('/admin/main/product/' + str(product.id), str(product)) for product in obj.products.all()]
+        )
 
     def cancel_order(self, request, queryset):
         queryset.update(status=Order.Status.CANCELED)
