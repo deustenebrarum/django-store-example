@@ -2,6 +2,27 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    title = models.CharField(
+        max_length=255, blank=False, verbose_name='Название',
+    )
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True,
+        verbose_name='Родительская категория'
+    )
+
+    @property
+    def products(self):
+        return Product.objects.filter(category=self)
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.title
+
+
 class Product(models.Model):
     title = models.CharField(
         max_length=255, blank=False, verbose_name='Название'
@@ -27,6 +48,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name='Дата обновления'
     )
+    categories = models.ManyToManyField(Category)
 
     class Meta:
         verbose_name = 'Товар'

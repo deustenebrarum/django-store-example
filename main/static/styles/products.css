@@ -58,3 +58,9 @@
 .product-card__original-price {
     text-decoration: line-through;
 }
+
+.products_page__horizonal_line {
+    margin: 1em 0;
+    border: 1px solid rgb(160, 160, 160);
+    height: 1px;
+}

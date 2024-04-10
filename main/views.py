@@ -14,16 +14,21 @@ def products_view(request: HttpRequest):
     products = Product.objects.filter(is_active=True)
     products = products.order_by('-count')
 
-    paginator = Paginator(products, 1)
-
-    page_number = request.GET.get("page", 1)
-    paged_products = paginator.get_page(page_number)
-
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
         products = products.filter(
             title__icontains=search_form.cleaned_data['query']
         )
+
+    paginator = Paginator(products, 1)
+
+    page_number = request.GET.get("page", 1)
+    paged_products = paginator.get_page(page_number)
+
+    if not request.GET._mutable:
+        request.GET._mutable = True
+
+    request.GET['query'] = search_form.cleaned_data['query']
 
     return HttpResponse(render(request, 'products.html', {
         'products_page': paged_products,
