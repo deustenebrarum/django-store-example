@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html_join
+from django.utils.html import format_html_join, format_html
 from django.urls import reverse
 
 from .models import Order, Product
@@ -18,20 +18,36 @@ class OrderAdmin(admin.ModelAdmin):
         'user__last_name'
     )
 
-    fields = ('user', 'status', 'display_order_products')
-    
+    fields = ('user', 'status', '_id', 'total_price', 'display_order_products')
+
     readonly_fields = ('display_order_products', '_id', 'total_price')
 
     list_filter = ('status', 'created_at', 'updated_at')
 
     actions = ['cancel_order', 'set_payed', 'set_in_progress']
-    
+
     @admin.display(description='Товары в заказе:')
     def display_order_products(self, obj):
-        return format_html_join(
-            '<br>', 
-            '<li><a href="{}">{}</a></li>', 
-            [('/admin/main/product/' + str(product.id), str(product)) for product in obj.products.all()]
+        products_data = [
+            (
+                reverse(
+                    'admin:main_product_change',
+                    args=[str(product.id)]
+                ),
+                f'{product.title} ({product.count})'
+            )
+            for product in obj.products.all()
+        ]
+
+        list_elements = format_html_join(
+            '',
+            '<li><a href="{}">{}</a></li>',
+            products_data
+        )
+
+        return format_html(
+            '<ul style="list-style-type:none; padding: 0; margin: 0">{}</ul>',
+            list_elements
         )
 
     def cancel_order(self, request, queryset):
