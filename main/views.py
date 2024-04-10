@@ -20,7 +20,12 @@ def products_view(request: HttpRequest):
             title__icontains=search_form.cleaned_data['query']
         )
 
-    paginator = Paginator(products, 1)
+    if search_form.is_valid() and search_form.cleaned_data['category']:
+        products = products.filter(
+            categories=search_form.cleaned_data['category']
+        )
+
+    paginator = Paginator(products, 5)
 
     page_number = request.GET.get("page", 1)
     paged_products = paginator.get_page(page_number)
